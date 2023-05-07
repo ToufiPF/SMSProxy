@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:enabled="true"
+        android:key="@string/preference_notification_email"
+        android:title="@string/preference_notification_email">
+        <EditTextPreference
+            android:defaultValue="@string/default_dest_email"
+            android:hint="@string/preference_mail_destination_address_title"
+            android:key="@string/preference_mail_destination_address_key"
+            android:persistent="true"
+            android:title="@string/preference_mail_destination_address_title" />
+    </PreferenceCategory>
+</PreferenceScreen>

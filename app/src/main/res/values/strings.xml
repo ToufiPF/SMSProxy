@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">SMSProxy</string>
+    <string name="check_sms_permissions">Check SMS permissions</string>
+    <string name="permissions_ok">All permissions are granted</string>
+
+    <!-- Preferences: notification means -->
+    <string-array name="empty_array" />
+
+    <string name="preference_notification_means_key">notification_means</string>
+    <string name="preference_notification_means_title">Notification means</string>
+    <string-array name="preference_notification_means">
+        <item>@string/preference_notification_email</item>
+        <item>@string/preference_notification_whatsapp</item>
+    </string-array>
+
+    <!-- Preferences: Email -->
+    <string name="preference_notification_email">Email</string>
+    <string name="preference_mail_destination_address_key" translatable="false">email_dest_address</string>
+    <string name="preference_mail_destination_address_title">Destination address</string>
+
+
+    <!-- Preferences: What's App -->
+    <string name="preference_notification_whatsapp">What\'sApp</string>
+    <string name="preference_whatsapp_destination_number_key" translatable="false">whatsapp_dest_number</string>
+    <string name="preference_whatsapp_destination_number_title">Destination Number</string>
+</resources>
