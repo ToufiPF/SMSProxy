@@ -14,7 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/preferences_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/context_desc_add_new_remote"
+            android:drawable="@drawable/baseline_add_24" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/permissions_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

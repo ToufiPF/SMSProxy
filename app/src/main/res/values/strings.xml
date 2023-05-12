@@ -23,4 +23,13 @@
     <string name="preference_notification_whatsapp">What\'sApp</string>
     <string name="preference_whatsapp_destination_number_key" translatable="false">whatsapp_dest_number</string>
     <string name="preference_whatsapp_destination_number_title">Destination Number</string>
+    <string name="context_desc_add_new_remote">Add new remote</string>
+
+
+    <string name="email_smtp_server_host">SMTP Server Hostname</string>
+    <string name="email_smtp_server_port">SMTP Server Port</string>
+    <string name="email_smtp_user">User (sender address)</string>
+    <string name="email_smtp_password">User password</string>
+    <string name="email_smtp_tls_enabled">StartTLS enabled</string>
+    <string name="email_destination">Destination address</string>
 </resources>
