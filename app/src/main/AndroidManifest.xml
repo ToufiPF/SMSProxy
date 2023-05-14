@@ -36,6 +36,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.PreferenceActivityImpl" />
+
         <!--        <receiver-->
         <!--            android:name=".sms.SmsReceiver"-->
         <!--            android:exported="true"-->

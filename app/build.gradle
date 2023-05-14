@@ -45,6 +45,10 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation 'javax.mail:mail:1.4.1'
 
+    // toufi utils
+    implementation files('libs/AndroidUtils-debug.aar')
+    androidTestImplementation files('libs/AndroidTestUtils-debug.aar')
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

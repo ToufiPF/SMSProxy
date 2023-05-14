@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import ch.epfl.smsproxy.R
-import ch.epfl.smsproxy.ui.fragment.GeneralPreferencesFragment
+import ch.epfl.smsproxy.ui.fragment.RelayListPreferenceFragment
 import java.net.URLEncoder
 
 @Suppress("PrivatePropertyName")
@@ -19,7 +19,7 @@ class MessageSender(private val context: Context) {
         context.getString(R.string.preference_whatsapp_destination_number_key)
 
     private val preferences =
-        context.getSharedPreferences(GeneralPreferencesFragment.NAME, Context.MODE_PRIVATE)
+        context.getSharedPreferences(RelayListPreferenceFragment.PREF_NAME, Context.MODE_PRIVATE)
 
     private val emailDestinations: List<String>
         get() {

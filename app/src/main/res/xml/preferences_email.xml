@@ -1,14 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:enabled="true"
-        android:key="@string/preference_notification_email"
-        android:title="@string/preference_notification_email">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="Server configuration">
         <EditTextPreference
+            android:defaultValue="@string/default_smtp_host"
+            android:key="@string/pref_key_email_smtp_host"
+            android:persistent="true"
+            android:summary="@string/default_smtp_host"
+            android:title="@string/email_smtp_server_host"
+            app:useSimpleSummaryProvider="true" />
+
+        <ch.epfl.toufi.android_utils.ui.preference.InputTypeEditTextPreference
+            android:defaultValue="@string/smtp_ssl_port"
+            android:inputType="number"
+            android:key="@string/pref_key_email_smtp_port"
+            android:persistent="true"
+            android:summary="@string/smtp_ssl_port"
+            android:title="@string/email_smtp_server_port"
+            app:useSimpleSummaryProvider="true" />
+
+        <ch.epfl.toufi.android_utils.ui.preference.InputTypeEditTextPreference
+            android:defaultValue="@string/default_smtp_user"
+            android:inputType="textEmailAddress"
+            android:key="@string/pref_key_email_smtp_user"
+            android:persistent="true"
+            android:summary="@string/default_smtp_user"
+            android:title="@string/email_smtp_user"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="@string/default_smtp_password"
+            android:key="@string/pref_key_email_smtp_password"
+            android:persistent="true"
+            android:title="@string/email_smtp_password"
+            app:useSimpleSummaryProvider="false" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="@string/pref_key_email_smtp_starttls"
+            android:persistent="true"
+            android:summaryOff="Using SSL/TLS"
+            android:summaryOn="Using StartTLS"
+            android:title="@string/email_smtp_tls_enabled" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Remote configuration">
+        <ch.epfl.toufi.android_utils.ui.preference.InputTypeEditTextPreference
             android:defaultValue="@string/default_dest_email"
             android:hint="@string/preference_mail_destination_address_title"
-            android:key="@string/preference_mail_destination_address_key"
+            android:inputType="textEmailAddress"
+            android:key="@string/pref_key_email_remote_address"
             android:persistent="true"
-            android:title="@string/preference_mail_destination_address_title" />
+            android:title="@string/preference_mail_destination_address_title"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 </PreferenceScreen>
