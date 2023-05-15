@@ -8,6 +8,7 @@ import ch.epfl.smsproxy.R
 import ch.epfl.smsproxy.relay.RelayFactory
 import ch.epfl.smsproxy.ui.fragment.EmailPreferencesFragment
 import ch.epfl.smsproxy.ui.fragment.RelayPreferenceFragment
+import ch.epfl.smsproxy.ui.fragment.SlackPreferenceFragment
 import ch.epfl.toufi.android_utils.ui.activity.PreferencesActivity
 
 class RelayPreferencesActivity : PreferencesActivity() {
@@ -43,10 +44,8 @@ class RelayPreferencesActivity : PreferencesActivity() {
 
     override fun loadFragment(fragmentId: String): RelayPreferenceFragment? {
         val fragment: RelayPreferenceFragment? = when (fragmentId) {
-            getString(R.string.pref_type_email) -> EmailPreferencesFragment(
-                sharedPreferencesName
-            )
-
+            getString(R.string.pref_type_email) -> EmailPreferencesFragment(sharedPreferencesName)
+            getString(R.string.pref_type_slack) -> SlackPreferenceFragment(sharedPreferencesName)
             else -> null
         }
 

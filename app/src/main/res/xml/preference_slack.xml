@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ch.epfl.toufi.android_utils.ui.preference.InputTypeEditTextPreference
+        android:defaultValue="@string/pref_slack_webhook_default"
+        android:inputType="textWebEditText"
+        android:key="@string/pref_slack_webhook_key"
+        android:persistent="true"
+        android:title="@string/pref_slack_webhook_title"
+        app:useSimpleSummaryProvider="false" />
+</PreferenceScreen>

@@ -60,6 +60,21 @@ object RelayFactory {
                 }
             }
 
+            context.getString(R.string.pref_type_slack) -> {
+                val webhook = config.getString(
+                    context.getString(R.string.pref_slack_webhook_key), null
+                )
+                if (webhook != null) {
+                    SlackRelay(webhook)
+                } else {
+                    Log.e(
+                        this::class.simpleName,
+                        "Invalid configuration for type $type: webhook is null"
+                    )
+                    null
+                }
+            }
+
             else -> {
                 Log.e(this::class.simpleName, "Unrecognized config type in preferences: $type")
                 null
