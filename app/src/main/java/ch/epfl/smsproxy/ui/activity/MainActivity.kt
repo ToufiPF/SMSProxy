@@ -5,7 +5,8 @@ import android.Manifest.permission.RECEIVE_MMS
 import android.Manifest.permission.RECEIVE_SMS
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.Button
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +23,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var relayListPreferences: SharedPreferences
     private lateinit var relayListFragment: RelayListFragment
     private lateinit var addPreferenceButton: FloatingActionButton
-    private lateinit var checkPermissionButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +37,25 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         addPreferenceButton.setOnClickListener {
             displayRemoteOptions()
         }
+    }
 
-        checkPermissionButton = findViewById(R.id.permissions_button)
-        checkPermissionButton.setOnClickListener {
-            if (checkHasPermissions(READ_SMS, RECEIVE_SMS, RECEIVE_MMS).reduceAll()) {
-                val text = getString(R.string.permissions_ok)
-                Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-            } else {
-                requestPermissions(this, arrayOf(READ_SMS, RECEIVE_SMS, RECEIVE_MMS), 1000)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu_main_activity, menu)
+        return true // otherwise menu not displayed
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_check_permissions -> {
+                checkAndRequestPermissions()
+                true
             }
+
+            else -> super.onOptionsItemSelected(item)
         }
     }
+
 
     private fun getPreferenceIndex(): Int = relayListPreferences.all.size
 
@@ -74,7 +82,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             setSingleChoiceItems(R.array.pref_type_display_names, -1) { dialog, checked ->
                 val type = resources.getStringArray(R.array.pref_types)[checked]
                 dialog.dismiss()
-
                 newConfiguration(type)
             }
             setNegativeButton(android.R.string.cancel) { dialog, _ ->
@@ -83,5 +90,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }.create().apply {
             setCanceledOnTouchOutside(true)
         }.show()
+    }
+
+    private fun checkAndRequestPermissions() {
+        if (checkHasPermissions(READ_SMS, RECEIVE_SMS, RECEIVE_MMS).reduceAll()) {
+            val text = getString(R.string.permissions_ok)
+            Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+        } else {
+            requestPermissions(this, arrayOf(READ_SMS, RECEIVE_SMS, RECEIVE_MMS), 1000)
+        }
     }
 }

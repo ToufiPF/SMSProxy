@@ -48,7 +48,7 @@
             android:inputType="textEmailAddress"
             android:key="@string/pref_email_remote_address_key"
             android:persistent="true"
-            android:title="@string/preference_mail_destination_address_title"
+            android:title="@string/pref_email_remote_address_title"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 </PreferenceScreen>
