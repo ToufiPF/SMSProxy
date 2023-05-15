@@ -51,43 +51,31 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun getPreferenceIndex(): Int = relayListPreferences.all.size
 
-    private fun newConfiguration(fragmentId: String, prefBaseName: String) {
-        val prefName = "${prefBaseName}_${getPreferenceIndex()}"
+    private fun newConfiguration(relayType: String) {
+        val prefName = "${relayType}_${getPreferenceIndex()}"
 
         // Record new sharedPreference name
         relayListPreferences.edit()
-            .putString(prefName, fragmentId)
+            .putString(prefName, relayType)
             .apply()
 
         RelayPreferencesActivity.launchIntent(
             this,
             title = prefName,
-            preferenceId = fragmentId,
+            preferenceId = relayType,
             preferenceName = prefName,
         )
-    }
-
-    private fun newEmailConfiguration() {
-        newConfiguration("Email", "email")
-    }
-
-    private fun newWhatsappConfiguration() {
-        newConfiguration("What's app", "whats_app")
     }
 
     private fun displayRemoteOptions() {
         AlertDialog.Builder(this).apply {
             setCancelable(true)
 
-            setSingleChoiceItems(R.array.preference_notification_means, -1) { dialog, checked ->
-                val type = resources.getStringArray(R.array.preference_notification_means)[checked]
+            setSingleChoiceItems(R.array.pref_type_display_names, -1) { dialog, checked ->
+                val type = resources.getStringArray(R.array.pref_types)[checked]
                 dialog.dismiss()
 
-                when (type) {
-                    getString(R.string.preference_notification_email) -> newEmailConfiguration()
-
-                    getString(R.string.preference_notification_whatsapp) -> newWhatsappConfiguration()
-                }
+                newConfiguration(type)
             }
             setNegativeButton(android.R.string.cancel) { dialog, _ ->
                 dialog.cancel()

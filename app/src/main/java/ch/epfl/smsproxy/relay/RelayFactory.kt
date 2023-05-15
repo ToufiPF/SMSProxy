@@ -23,24 +23,24 @@ object RelayFactory {
      */
     fun instantiateFromPreference(context: Context, config: SharedPreferences): Relay? =
         when (val type = config.getString(PREF_TYPE_KEY, null)) {
-            context.getString(R.string.preference_notification_email) -> {
+            context.getString(R.string.pref_type_email) -> {
                 val host = config.getString(
-                    context.getString(R.string.pref_key_email_smtp_host), null
+                    context.getString(R.string.pref_email_smtp_host_key), null
                 )
                 val port = config.getString(
-                    context.getString(R.string.pref_key_email_smtp_port), null
+                    context.getString(R.string.pref_email_smtp_port_key), null
                 )?.toIntOrNull()
                 val user = config.getString(
-                    context.getString(R.string.pref_key_email_smtp_user), null
+                    context.getString(R.string.pref_email_smtp_user_key), null
                 )
                 val pwd = config.getString(
-                    context.getString(R.string.pref_key_email_smtp_password), null
+                    context.getString(R.string.pref_email_smtp_password_key), null
                 )
                 val startTls = config.getBoolean(
-                    context.getString(R.string.pref_key_email_smtp_starttls), false
+                    context.getString(R.string.pref_email_smtp_starttls_key), false
                 )
                 val dest = config.getString(
-                    context.getString(R.string.pref_key_email_remote_address), null
+                    context.getString(R.string.pref_email_remote_address_key), null
                 )
 
                 if (host != null && port != null && user != null && dest != null) {

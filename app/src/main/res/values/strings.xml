@@ -3,40 +3,45 @@
     <string name="check_sms_permissions">Check SMS permissions</string>
     <string name="permissions_ok">All permissions are granted</string>
 
-    <!-- Preferences: notification means -->
-    <string-array name="empty_array" />
+    <string name="main_activity_title">SMSProxy - Configuration</string>
 
-    <string name="preference_notification_means_key">notification_means</string>
-    <string name="preference_notification_means_title">Notification means</string>
-    <string-array name="preference_notification_means">
-        <item>@string/preference_notification_email</item>
-        <item>@string/preference_notification_whatsapp</item>
+    <string name="content_description_add_new_remote">Add new remote</string>
+    <string name="content_description_delete_relay_configuration">Delete relay configuration</string>
+
+    <!-- Preferences: All -->
+    <string-array name="empty_array" />
+    <string-array name="pref_types">
+        <item>@string/pref_type_email</item>
+        <item>@string/pref_type_slack</item>
+    </string-array>
+    <string-array name="pref_type_display_names">
+        <item>@string/pref_type_email_display_name</item>
+        <item>@string/pref_type_slack_display_name</item>
     </string-array>
 
     <!-- Preferences: Email -->
-    <string name="preference_notification_email">Email</string>
-    <string name="preference_mail_destination_address_key" translatable="false">email_dest_address</string>
-    <string name="preference_mail_destination_address_title">Destination address</string>
+    <string name="pref_type_email" translatable="false">email</string>
+    <string name="pref_type_email_display_name">Email</string>
 
+    <string name="pref_email_smtp_server_host_title">SMTP Server Hostname</string>
+    <string name="pref_email_smtp_server_port_title">SMTP Server Port</string>
+    <string name="pref_email_smtp_user_title">User (sender address)</string>
+    <string name="pref_email_smtp_password_title">User password</string>
+    <string name="pref_email_smtp_tls_enabled_title">StartTLS enabled</string>
+    <string name="pref_email_remote_address_title">Destination address</string>
 
-    <!-- Preferences: What's App -->
-    <string name="preference_notification_whatsapp">What\'sApp</string>
-    <string name="preference_whatsapp_destination_number_key" translatable="false">whatsapp_dest_number</string>
-    <string name="preference_whatsapp_destination_number_title">Destination Number</string>
-    <string name="context_desc_add_new_remote">Add new remote</string>
+    <string name="pref_email_smtp_host_key" translatable="false">pref_key_smtp_host</string>
+    <string name="pref_email_smtp_port_key" translatable="false">pref_key_smtp_port</string>
+    <string name="pref_email_smtp_user_key" translatable="false">pref_key_smtp_user</string>
+    <string name="pref_email_smtp_password_key" translatable="false">pref_key_smtp_password</string>
+    <string name="pref_email_smtp_starttls_key" translatable="false">pref_key_smtp_starttls</string>
+    <string name="pref_email_remote_address_key" translatable="false">pref_key_email_remote_address</string>
 
+    <string name="pref_email_smtp_ssl_port_default">465</string>
+    <string name="pref_email_smtp_start_tls_port_default">587</string>
 
-    <string name="email_smtp_server_host">SMTP Server Hostname</string>
-    <string name="email_smtp_server_port">SMTP Server Port</string>
-    <string name="email_smtp_user">User (sender address)</string>
-    <string name="email_smtp_password">User password</string>
-    <string name="email_smtp_tls_enabled">StartTLS enabled</string>
-    <string name="email_destination">Destination address</string>
-    <string name="pref_key_email_smtp_host">pref_key_smtp_host</string>
-    <string name="pref_key_email_smtp_port">pref_key_smtp_port</string>
-    <string name="pref_key_email_smtp_user">pref_key_smtp_user</string>
-    <string name="pref_key_email_smtp_password">pref_key_smtp_password</string>
-    <string name="pref_key_email_smtp_starttls">pref_key_smtp_starttls</string>
-    <string name="pref_key_email_remote_address">pref_key_email_remote_address</string>
-    <string name="delete_relay_configuration_content_description">Delete relay configuration</string>
+    <!-- Preferences: Slack -->
+    <string name="pref_type_slack" translatable="false">slack</string>
+    <string name="pref_type_slack_display_name">Slack</string>
+
 </resources>

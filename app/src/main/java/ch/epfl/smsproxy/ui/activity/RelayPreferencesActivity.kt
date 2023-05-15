@@ -43,7 +43,7 @@ class RelayPreferencesActivity : PreferencesActivity() {
 
     override fun loadFragment(fragmentId: String): RelayPreferenceFragment? {
         val fragment: RelayPreferenceFragment? = when (fragmentId) {
-            getString(R.string.preference_notification_email) -> EmailPreferencesFragment(
+            getString(R.string.pref_type_email) -> EmailPreferencesFragment(
                 sharedPreferencesName
             )
 
@@ -57,5 +57,4 @@ class RelayPreferencesActivity : PreferencesActivity() {
 
         return fragment
     }
-
 }

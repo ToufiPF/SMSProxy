@@ -18,7 +18,7 @@
         android:id="@+id/relay_delete"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:contentDescription="@string/delete_relay_configuration_content_description"
+        android:contentDescription="@string/content_description_delete_relay_configuration"
         android:src="@drawable/baseline_close_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

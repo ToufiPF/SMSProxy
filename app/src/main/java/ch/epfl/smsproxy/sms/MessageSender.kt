@@ -37,7 +37,7 @@ class MessageSender(private val context: Context) : OnSharedPreferenceChangeList
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        requireNotNull(key)
+        if (key == null) return
         if (!this::relays.isInitialized) {
             initializeRelays()
             return
