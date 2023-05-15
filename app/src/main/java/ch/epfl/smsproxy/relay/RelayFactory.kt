@@ -5,11 +5,18 @@ import android.content.SharedPreferences
 import android.util.Log
 import ch.epfl.smsproxy.R
 
+@Suppress("MemberVisibilityCanBePrivate")
 object RelayFactory {
 
     const val PREF_TYPE_KEY = "relay_type"
 
 
+    /**
+     * Instantiates a [Relay] from the config saved in the given preferences.
+     * @param configPreferencesName [String] name of the [SharedPreferences]
+     * holding the configuration of the relay
+     * @return [Relay]
+     */
     fun instantiateFromPreference(context: Context, configPreferencesName: String): Relay? =
         instantiateFromPreference(
             context,
