@@ -38,4 +38,5 @@
     <string name="pref_key_email_smtp_password">pref_key_smtp_password</string>
     <string name="pref_key_email_smtp_starttls">pref_key_smtp_starttls</string>
     <string name="pref_key_email_remote_address">pref_key_email_remote_address</string>
+    <string name="delete_relay_configuration_content_description">Delete relay configuration</string>
 </resources>

@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.PreferenceActivityImpl" />
+        <activity android:name=".ui.activity.RelayPreferencesActivity" />
 
         <!--        <receiver-->
         <!--            android:name=".sms.SmsReceiver"-->

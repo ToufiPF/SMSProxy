@@ -3,7 +3,6 @@ package ch.epfl.smsproxy.ui.activity
 import android.Manifest.permission.READ_SMS
 import android.Manifest.permission.RECEIVE_MMS
 import android.Manifest.permission.RECEIVE_SMS
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
@@ -12,17 +11,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.requestPermissions
 import ch.epfl.smsproxy.R
-import ch.epfl.smsproxy.ui.fragment.RelayListPreferenceFragment
-import ch.epfl.smsproxy.ui.fragment.RelayListPreferenceFragment.Companion.PREF_NAME
+import ch.epfl.smsproxy.ui.fragment.RelayListFragment
+import ch.epfl.smsproxy.ui.fragment.RelayListFragment.Companion.PREF_NAME
 import ch.epfl.toufi.android_utils.LogicExtensions.reduceAll
 import ch.epfl.toufi.android_utils.ui.UIExtensions.checkHasPermissions
-import ch.epfl.toufi.android_utils.ui.activity.PreferencesActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var relayListPreferences: SharedPreferences
-    private lateinit var relayListFragment: RelayListPreferenceFragment
+    private lateinit var relayListFragment: RelayListFragment
     private lateinit var addPreferenceButton: FloatingActionButton
     private lateinit var checkPermissionButton: Button
 
@@ -30,7 +28,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         relayListPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
-        relayListFragment = RelayListPreferenceFragment()
+        relayListFragment = RelayListFragment()
 
         supportFragmentManager.beginTransaction().add(R.id.preferences_container, relayListFragment)
             .commit()
@@ -58,14 +56,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         // Record new sharedPreference name
         relayListPreferences.edit()
-            .putBoolean(prefName, true)
+            .putString(prefName, fragmentId)
             .apply()
 
-        val intent = Intent(this, PreferenceActivityImpl::class.java)
-        intent.putExtra(PreferencesActivity.EXTRA_TITLE, fragmentId)
-        intent.putExtra(PreferencesActivity.EXTRA_PREFERENCES_ID, fragmentId)
-        intent.putExtra(PreferenceActivityImpl.EXTRA_PREFERENCES_NAME, prefName)
-        startActivity(intent)
+        RelayPreferencesActivity.launchIntent(
+            this,
+            title = prefName,
+            preferenceId = fragmentId,
+            preferenceName = prefName,
+        )
     }
 
     private fun newEmailConfiguration() {

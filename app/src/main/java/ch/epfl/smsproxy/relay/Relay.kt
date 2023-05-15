@@ -5,6 +5,7 @@ package ch.epfl.smsproxy.relay
  * (e.g., email, slack, whatsapp...)
  */
 fun interface Relay {
+
     /**
      * Sends the text to the configured remote.
      */
