@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-
     private fun getPreferenceIndex(): Int = relayListPreferences.all.size
 
     private fun newConfiguration(relayType: String) {

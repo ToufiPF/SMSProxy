@@ -35,6 +35,18 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    testOptions {
+        animationsDisabled = true
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/*.md"
+        }
+    }
 }
 
 dependencies {
@@ -44,6 +56,7 @@ dependencies {
 
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation 'javax.mail:mail:1.4.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     // toufi utils
     implementation files('libs/AndroidUtils-debug.aar')
@@ -51,5 +64,17 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    def espressoVersion = "3.5.1"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+
+    // 1.12.7 and + causes build to fail due to duplicate META-INF/LICENCE files
+    def mockkVersion = "1.13.5"
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "io.mockk:mockk-agent:$mockkVersion"
+    androidTestImplementation "io.mockk:mockk-android:$mockkVersion"
+    androidTestImplementation "io.mockk:mockk-agent:$mockkVersion"
 }

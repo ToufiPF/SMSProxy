@@ -6,7 +6,7 @@
             android:defaultValue="@string/pref_email_smtp_host_default"
             android:key="@string/pref_email_smtp_host_key"
             android:persistent="true"
-            android:title="@string/pref_email_smtp_server_host_title"
+            android:title="@string/pref_email_smtp_host_title"
             app:useSimpleSummaryProvider="true" />
 
         <ch.epfl.toufi.android_utils.ui.preference.InputTypeEditTextPreference
@@ -14,7 +14,7 @@
             android:inputType="number"
             android:key="@string/pref_email_smtp_port_key"
             android:persistent="true"
-            android:title="@string/pref_email_smtp_server_port_title"
+            android:title="@string/pref_email_smtp_port_title"
             app:useSimpleSummaryProvider="true" />
 
         <ch.epfl.toufi.android_utils.ui.preference.InputTypeEditTextPreference
@@ -38,7 +38,7 @@
             android:persistent="true"
             android:summaryOff="Using SSL/TLS"
             android:summaryOn="Using StartTLS"
-            android:title="@string/pref_email_smtp_tls_enabled_title" />
+            android:title="@string/pref_email_smtp_start_tls_title" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Remote configuration">

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import ch.epfl.smsproxy.R
+import java.net.URL
 
 @Suppress("MemberVisibilityCanBePrivate")
 object RelayFactory {
@@ -65,7 +66,7 @@ object RelayFactory {
                     context.getString(R.string.pref_slack_webhook_key), null
                 )
                 if (webhook != null) {
-                    SlackRelay(webhook)
+                    SlackRelay(URL(webhook))
                 } else {
                     Log.e(
                         this::class.simpleName,

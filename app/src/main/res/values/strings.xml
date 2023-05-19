@@ -23,11 +23,11 @@
     <string name="pref_type_email" translatable="false">email</string>
     <string name="pref_type_email_display_name">Email</string>
 
-    <string name="pref_email_smtp_server_host_title">SMTP Server Hostname</string>
-    <string name="pref_email_smtp_server_port_title">SMTP Server Port</string>
+    <string name="pref_email_smtp_host_title">SMTP Server Hostname</string>
+    <string name="pref_email_smtp_port_title">SMTP Server Port</string>
     <string name="pref_email_smtp_user_title">User (sender address)</string>
     <string name="pref_email_smtp_password_title">User password</string>
-    <string name="pref_email_smtp_tls_enabled_title">StartTLS enabled</string>
+    <string name="pref_email_smtp_start_tls_title">StartTLS enabled</string>
     <string name="pref_email_remote_address_title">Destination address</string>
 
     <string name="pref_email_smtp_host_key" translatable="false">pref_key_smtp_host</string>

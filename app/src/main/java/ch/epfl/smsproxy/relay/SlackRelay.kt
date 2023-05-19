@@ -1,17 +1,16 @@
 package ch.epfl.smsproxy.relay
 
-import org.json.JSONObject
+import com.google.gson.Gson
 import java.io.BufferedOutputStream
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 class SlackRelay(
-    webhook: String
+    private val webhookUrl: URL
 ) : Relay {
-    private val webhookUrl: URL = URL(webhook)
-
+    private val gson = Gson()
     private fun textToJsonPayload(text: String): String =
-        JSONObject.wrap(mapOf("text" to text))!!.toString()
+        gson.toJson(mapOf("text" to text))
 
     override fun relay(text: String) {
         val payload = textToJsonPayload(text)
@@ -28,7 +27,9 @@ class SlackRelay(
                 setFixedLengthStreamingMode(bytes.size)
 
                 // write the actual payload
-                BufferedOutputStream(outputStream).write(bytes)
+                BufferedOutputStream(outputStream).use {
+                    it.write(bytes)
+                }
             }
         } finally {
             connection.disconnect()
