@@ -8,9 +8,11 @@ import android.provider.Telephony.Sms.Intents.DATA_SMS_RECEIVED_ACTION
 import android.provider.Telephony.Sms.Intents.SMS_RECEIVED_ACTION
 import android.text.format.DateFormat
 import android.util.Log
+import javax.inject.Inject
 
-
-class SmsReceiver : BroadcastReceiver() {
+class SmsReceiver @Inject constructor(
+    private val sendHelper: MessageSender
+) : BroadcastReceiver() {
 
     companion object {
         fun timestampToString(timeMs: Long): String {
@@ -25,8 +27,6 @@ class SmsReceiver : BroadcastReceiver() {
             return
         }
 
-        val sendHelper = MessageSender(context)
-
         val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
         for (sms in messages) {
             val time = timestampToString(sms.timestampMillis)
@@ -34,7 +34,7 @@ class SmsReceiver : BroadcastReceiver() {
             val body = sms.displayMessageBody
 
             val sentText = "At $time, $sender sent:\n$body"
-            sendHelper.sendMessage(sentText)
+            sendHelper.broadcast(sentText)
         }
     }
 }
