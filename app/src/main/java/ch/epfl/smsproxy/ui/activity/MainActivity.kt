@@ -9,16 +9,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.requestPermissions
 import ch.epfl.smsproxy.R
 import ch.epfl.smsproxy.ui.fragment.RelayListFragment
 import ch.epfl.smsproxy.ui.fragment.RelayListFragment.Companion.PREF_NAME
 import ch.epfl.toufi.android_utils.LogicExtensions.reduceAll
+import ch.epfl.toufi.android_utils.permissions.MockPermissionsActivity
 import ch.epfl.toufi.android_utils.ui.UIExtensions.checkHasPermissions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : MockPermissionsActivity(R.layout.activity_main) {
 
     private lateinit var relayListPreferences: SharedPreferences
     private lateinit var relayListFragment: RelayListFragment

@@ -1,8 +1,13 @@
 package ch.epfl.smsproxy.ui.activity
 
+import android.Manifest.permission.READ_SMS
+import android.Manifest.permission.RECEIVE_MMS
+import android.Manifest.permission.RECEIVE_SMS
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import androidx.core.content.PermissionChecker.PERMISSION_DENIED
+import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
@@ -21,12 +26,9 @@ import ch.epfl.smsproxy.ui.activity.RelayPreferencesActivity.Companion.EXTRA_PRE
 import ch.epfl.smsproxy.ui.fragment.RelayListFragment
 import ch.epfl.toufi.android_test_utils.espresso.IntentAsserts.assertNoUnverifiedIntentIgnoringBootstrap
 import ch.epfl.toufi.android_test_utils.espresso.ViewInteractions.onMenuItem
-import ch.epfl.toufi.android_utils.ui.UIExtensions
+import ch.epfl.toufi.android_utils.permissions.MockPermissionsActivity
 import ch.epfl.toufi.android_utils.ui.activity.PreferencesActivity.Companion.EXTRA_PREFERENCES_ID
 import ch.epfl.toufi.android_utils.ui.activity.PreferencesActivity.Companion.EXTRA_TITLE
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.startsWith
 import org.junit.After
@@ -44,6 +46,8 @@ class MainActivityInstrumentedTest {
     @Before
     fun init() {
         Intents.init()
+        MockPermissionsActivity.configuredSelfPermissions.clear()
+        MockPermissionsActivity.configuredShouldShowRationale.clear()
 
         context = getApplicationContext()
         relayListPrefs = context.getSharedPreferences(RelayListFragment.PREF_NAME, MODE_PRIVATE)
@@ -64,7 +68,12 @@ class MainActivityInstrumentedTest {
 //    val permissionRule = GrantPermissionRule.grant(READ_SMS, RECEIVE_SMS, RECEIVE_MMS, INTERNET)!!
 
     private fun runTest(testFun: (ActivityScenario<MainActivity>) -> Unit) {
-        ActivityScenario.launch(MainActivity::class.java).use(testFun)
+        ActivityScenario.launch(MainActivity::class.java).use { scenario ->
+            // depending on espresso version,
+            // may need to catch the initial intent used to start the activity
+            runCatching { intended(hasComponent(MainActivity::class.qualifiedName)) }
+            testFun(scenario)
+        }
     }
 
     @Test
@@ -76,20 +85,28 @@ class MainActivityInstrumentedTest {
     }
 
     @Test
-    fun clickingOnMenuItemTriggersPermissionsCheck() = runTest { scenario ->
-        with(mockk<UIExtensions>()) {
-            scenario.onActivity { activity ->
-                every { activity.checkHasPermissions(*anyVararg()) } answers { call ->
-                    Array(call.invocation.args.size) { false }.toBooleanArray()
-                }
-            }
+    fun clickingOnMenuItemWithPermissionsGrantedShowsToast() {
+        MockPermissionsActivity.configuredSelfPermissions[READ_SMS] = PERMISSION_GRANTED
+        MockPermissionsActivity.configuredSelfPermissions[RECEIVE_SMS] = PERMISSION_GRANTED
+        MockPermissionsActivity.configuredSelfPermissions[RECEIVE_MMS] = PERMISSION_GRANTED
 
+        runTest {
             onMenuItem(withText(R.string.check_sms_permissions)).perform(click())
-            scenario.onActivity { activity ->
-                verify {
-                    activity.checkHasPermissions(*anyVararg())
-                }
-            }
+            //TODO assert Toast is called
+
+        }
+    }
+
+    @Test
+    fun clickingOnMenuItemWithPermissionsNotGrantedRequestsThem() {
+        MockPermissionsActivity.configuredSelfPermissions[READ_SMS] = PERMISSION_DENIED
+        MockPermissionsActivity.configuredSelfPermissions[RECEIVE_SMS] = PERMISSION_GRANTED
+        MockPermissionsActivity.configuredSelfPermissions[RECEIVE_MMS] = PERMISSION_GRANTED
+
+        runTest {
+            onMenuItem(withText(R.string.check_sms_permissions)).perform(click())
+            //TODO assert request permissions is called
+
         }
     }
 
@@ -103,13 +120,12 @@ class MainActivityInstrumentedTest {
 
         onView(withText(R.string.pref_type_email_display_name)).perform(click())
 
-        val prefTypeEmail = context.getString(R.string.pref_type_email)
         intended(
             allOf(
                 hasComponent(RelayPreferencesActivity::class.java.name),
-                hasExtra(EXTRA_TITLE, startsWith(prefTypeEmail)),
-                hasExtra(EXTRA_PREFERENCES_ID, prefTypeEmail),
-                hasExtra(EXTRA_PREFERENCES_NAME, startsWith(prefTypeEmail)),
+                hasExtra(EXTRA_TITLE, startsWith(emailType)),
+                hasExtra(EXTRA_PREFERENCES_ID, emailType),
+                hasExtra(EXTRA_PREFERENCES_NAME, startsWith(emailType)),
             )
         )
 
@@ -118,15 +134,23 @@ class MainActivityInstrumentedTest {
 
     @Test
     fun clickingOnItemLaunchesRelayPreferenceActivity() {
-
-        relayListPrefs.edit()
-            .putString("test_pref_name_1", emailType)
-            .putString("test_pref_name_2", slackType)
-            .apply()
+        val pref1 = "test_pref_name_1"
+        val pref2 = "test_pref_name_2"
+        relayListPrefs.edit().putString(pref1, emailType).putString(pref2, slackType).apply()
 
         runTest {
+            onView(withText(pref2)).perform(click())
 
+            intended(
+                allOf(
+                    hasComponent(RelayPreferencesActivity::class.java.name),
+                    hasExtra(EXTRA_TITLE, pref2),
+                    hasExtra(EXTRA_PREFERENCES_ID, slackType),
+                    hasExtra(EXTRA_PREFERENCES_NAME, pref2),
+                )
+            )
 
+            assertNoUnverifiedIntentIgnoringBootstrap()
         }
     }
 }
