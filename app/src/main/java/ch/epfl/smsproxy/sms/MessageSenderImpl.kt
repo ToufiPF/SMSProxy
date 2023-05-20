@@ -40,13 +40,12 @@ class MessageSenderImpl @Inject constructor(
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == null) return
-        if (!this::relays.isInitialized) {
-            initializeRelays()
+        // can ignore changes until broadcast is called once
+        if (sharedPreferences == null || key == null || !this::relays.isInitialized) {
             return
         }
 
-        val added = sharedPreferences?.getString(key, null) != null
+        val added = sharedPreferences.getString(key, null) != null
         if (added) {
             RelayFactory.instantiateFromPreference(context, key)?.let { relay ->
                 relays[key] = relay
