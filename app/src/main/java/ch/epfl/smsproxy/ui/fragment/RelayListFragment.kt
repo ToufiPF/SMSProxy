@@ -67,8 +67,7 @@ class RelayListFragment : Fragment(R.layout.fragment_relay_list), OnSharedPrefer
                     relayListPreferences.edit().remove(elem.first).apply()
 
                     // Clear actual preference
-                    val config = it.context.getSharedPreferences(elem.first, MODE_PRIVATE)
-                    config.edit().clear().apply()
+                    it.context.deleteSharedPreferences(elem.first)
                 }
             }
         }
@@ -101,7 +100,6 @@ class RelayListFragment : Fragment(R.layout.fragment_relay_list), OnSharedPrefer
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         adapter = Adapter(requireActivity().layoutInflater, relayListPrefs)
         recycler.adapter = adapter
-
     }
 
     override fun onResume() {
