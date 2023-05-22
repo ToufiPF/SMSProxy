@@ -1,6 +1,7 @@
 package ch.epfl.smsproxy.relay
 
 import android.icu.util.Calendar
+import android.util.Log
 import java.util.Properties
 import javax.mail.Authenticator
 import javax.mail.Message.RecipientType
@@ -17,6 +18,9 @@ class EmailService(
     private val senderPassword: String?,
     private val startTls: Boolean,
 ) {
+    companion object {
+        private val TAG = this::class.simpleName!!
+    }
 
     private class SMTPAuthenticator(
         private val username: String,
@@ -32,7 +36,6 @@ class EmailService(
         subject: String,
         text: String
     ) {
-
         val props = Properties().apply {
             put("mail.smtp.host", smtpServer)
             put("mail.smtp.port", smtpPort.toString())
@@ -42,13 +45,15 @@ class EmailService(
             put("mail.smtp.user", senderAddress)
         }
         val auth = senderPassword?.let { SMTPAuthenticator(senderAddress, it) }
+        Log.d(TAG, "SMTP props: $props, auth: $auth")
 
         val session = Session.getInstance(props, auth)
         session.debug = true
         val msg = MimeMessage(session).apply {
-            setFrom(InternetAddress(senderAddress))
             setSubject(subject)
             setText(text)
+            setFrom(InternetAddress(senderAddress))
+            sender = InternetAddress(senderAddress)
             sentDate = Calendar.getInstance().time
 
             listOf(RecipientType.TO, RecipientType.CC, RecipientType.BCC).zip(
@@ -57,6 +62,7 @@ class EmailService(
                 setRecipients(type, addresses.map { InternetAddress(it) }.toTypedArray())
             }
         }
+        Log.d(TAG, "Sender: ${msg.sender}, msg: ${msg.subject}, recipients: ${msg.allRecipients}")
 
         try {
             Transport.send(msg)
