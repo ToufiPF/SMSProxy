@@ -5,24 +5,53 @@ import android.Manifest.permission.RECEIVE_MMS
 import android.Manifest.permission.RECEIVE_SMS
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat.requestPermissions
 import ch.epfl.smsproxy.R
+import ch.epfl.smsproxy.ui.activity.RelayPreferencesActivity.Companion.EXTRA_PREFERENCES_NAME
 import ch.epfl.smsproxy.ui.fragment.RelayListFragment
 import ch.epfl.smsproxy.ui.fragment.RelayListFragment.Companion.PREF_NAME
 import ch.epfl.toufi.android_utils.LogicExtensions.reduceAll
 import ch.epfl.toufi.android_utils.permissions.MockPermissionsActivity
 import ch.epfl.toufi.android_utils.ui.UIExtensions.checkHasPermissions
+import ch.epfl.toufi.android_utils.ui.activity.PreferencesActivity.Companion.EXTRA_PREFERENCES_ID
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : MockPermissionsActivity(R.layout.activity_main) {
 
+    companion object {
+        private val TAG = this::class.simpleName!!
+    }
+
+
     private lateinit var relayListPreferences: SharedPreferences
     private lateinit var relayListFragment: RelayListFragment
     private lateinit var addPreferenceButton: FloatingActionButton
+
+    private val launchRelayPreferencesActivity =
+        registerForActivityResult(StartActivityForResult()) { result ->
+            requireNotNull(result)
+
+            if (result.resultCode == RESULT_OK) {
+                // Record new sharedPreference name
+                val prefName = result.data?.getStringExtra(EXTRA_PREFERENCES_NAME)
+                val prefType = result.data?.getStringExtra(EXTRA_PREFERENCES_ID)
+                if (prefName != null && prefType != null) {
+                    Log.i(TAG, "Added $prefName -> $prefType mapping to relayListPreferences")
+                    relayListPreferences.edit().putString(prefName, prefType).apply()
+                    return@registerForActivityResult
+                }
+            }
+            Log.w(
+                TAG,
+                "Received invalid result from RelayPrefActivity: ${result.resultCode}, ${result.data?.extras}"
+            )
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,17 +90,13 @@ class MainActivity : MockPermissionsActivity(R.layout.activity_main) {
     private fun newConfiguration(relayType: String) {
         val prefName = "${relayType}_${getPreferenceIndex()}"
 
-        // Record new sharedPreference name
-        relayListPreferences.edit()
-            .putString(prefName, relayType)
-            .apply()
-
-        RelayPreferencesActivity.launchIntent(
-            this,
+        val intent = RelayPreferencesActivity.makeIntent(
+            applicationContext,
             title = prefName,
             preferenceId = relayType,
             preferenceName = prefName,
         )
+        launchRelayPreferencesActivity.launch(intent)
     }
 
     private fun displayRemoteOptions() {

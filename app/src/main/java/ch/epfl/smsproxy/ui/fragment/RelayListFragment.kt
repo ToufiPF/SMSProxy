@@ -55,12 +55,13 @@ class RelayListFragment : Fragment(R.layout.fragment_relay_list), OnSharedPrefer
             binding.apply {
                 relayName.text = elem.first
                 relayName.setOnClickListener {
-                    RelayPreferencesActivity.launchIntent(
-                        it.context,
+                    val intent = RelayPreferencesActivity.makeIntent(
+                        it.context.applicationContext,
                         title = elem.first,
                         preferenceId = elem.second,
                         preferenceName = elem.first,
                     )
+                    it.context.startActivity(intent)
                 }
                 relayDelete.setOnClickListener {
                     // Remove preference name from relayList preferences
