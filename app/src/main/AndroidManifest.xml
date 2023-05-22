@@ -40,18 +40,6 @@
 
         <activity android:name=".ui.activity.RelayPreferencesActivity" />
 
-        <!--        <receiver-->
-        <!--            android:name=".sms.SmsReceiver"-->
-        <!--            android:exported="true"-->
-        <!--            android:permission="com.google.android.gms.auth.api.phone.permission.SEND">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />-->
-        <!--            </intent-filter>-->
-        <!--        </receiver>-->
-
-        <!--        android:permission="android.permission.BROADCAST_SMS"-->
-        <!--        <intent-filter >-->
-
         <receiver
             android:name=".sms.SmsReceiver"
             android:enabled="true"

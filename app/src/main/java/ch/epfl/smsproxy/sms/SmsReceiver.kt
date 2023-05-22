@@ -29,20 +29,27 @@ class SmsReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null) return
-        if (!(intent?.action == SMS_RECEIVED_ACTION || intent?.action == DATA_SMS_RECEIVED_ACTION)) {
-            Log.w(this::class.simpleName, "Received intent with invalid action '${intent?.action}'")
-            return
-        }
 
-        val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
-        for (sms in messages) {
-            val time = timestampToString(sms.timestampMillis)
-            val sender = sms.displayOriginatingAddress
-            val body = sms.displayMessageBody
+        when (intent?.action) {
+            SMS_RECEIVED_ACTION, DATA_SMS_RECEIVED_ACTION -> {
+                val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
+                for (sms in messages) {
+                    val time = timestampToString(sms.timestampMillis)
+                    val sender = sms.displayOriginatingAddress
+                    val body = sms.displayMessageBody
 
-            val sentText = "At $time, $sender sent:\n$body"
-            CoroutineScope(SupervisorJob()).launch(Dispatchers.IO) {
-                sendHelper.broadcast(sentText)
+                    val sentText = "At $time, $sender sent:\n$body"
+                    CoroutineScope(SupervisorJob()).launch(Dispatchers.IO) {
+                        sendHelper.broadcast(sentText)
+                    }
+                }
+            }
+
+            else -> {
+                Log.w(
+                    this::class.simpleName,
+                    "Received intent with invalid action '${intent?.action}'"
+                )
             }
         }
     }

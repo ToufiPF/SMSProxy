@@ -1,6 +1,7 @@
 package ch.epfl.smsproxy.relay
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.util.Log
 import ch.epfl.smsproxy.R
@@ -21,7 +22,7 @@ object RelayFactory {
     fun instantiateFromPreference(context: Context, configPreferencesName: String): Relay? =
         instantiateFromPreference(
             context,
-            context.getSharedPreferences(configPreferencesName, Context.MODE_PRIVATE),
+            context.getSharedPreferences(configPreferencesName, MODE_PRIVATE),
         )
 
     /**
