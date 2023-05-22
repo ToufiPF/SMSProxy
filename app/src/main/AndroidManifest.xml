@@ -17,6 +17,7 @@
     <!--    <uses-permission android:name="android.permission.SEND_RESPOND_VIA_MESSAGE" />-->
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

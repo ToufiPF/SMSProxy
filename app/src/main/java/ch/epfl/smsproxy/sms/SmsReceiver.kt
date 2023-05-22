@@ -8,17 +8,20 @@ import android.provider.Telephony.Sms.Intents.DATA_SMS_RECEIVED_ACTION
 import android.provider.Telephony.Sms.Intents.SMS_RECEIVED_ACTION
 import android.text.format.DateFormat
 import android.util.Log
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-class SmsReceiver @Inject constructor(
-    private val sendHelper: MessageSender
-) : BroadcastReceiver() {
+@AndroidEntryPoint
+class SmsReceiver : BroadcastReceiver() {
 
     companion object {
         fun timestampToString(timeMs: Long): String {
             return DateFormat.format("dd/MM, hh:mm", timeMs).toString()
         }
     }
+
+    @Inject
+    lateinit var sendHelper: MessageSender
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null) return
