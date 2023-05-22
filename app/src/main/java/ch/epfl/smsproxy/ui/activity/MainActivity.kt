@@ -26,6 +26,8 @@ class MainActivity : MockPermissionsActivity(R.layout.activity_main) {
 
     companion object {
         private val TAG = this::class.simpleName!!
+
+        private val PERMISSIONS = arrayOf(READ_SMS, RECEIVE_SMS, RECEIVE_MMS)
     }
 
 
@@ -85,11 +87,18 @@ class MainActivity : MockPermissionsActivity(R.layout.activity_main) {
         }
     }
 
-    private fun getPreferenceIndex(): Int = relayListPreferences.all.size
+    private fun generatePreferenceName(relayType: String): String {
+        var i = 0
+        var prefName: String // =
+        do {
+            prefName = "${relayType}_$i"
+            i += 1
+        } while (relayListPreferences.getString(prefName, null) != null)
+        return prefName
+    }
 
     private fun newConfiguration(relayType: String) {
-        val prefName = "${relayType}_${getPreferenceIndex()}"
-
+        val prefName = generatePreferenceName(relayType)
         val intent = RelayPreferencesActivity.makeIntent(
             applicationContext,
             title = prefName,
@@ -117,11 +126,11 @@ class MainActivity : MockPermissionsActivity(R.layout.activity_main) {
     }
 
     private fun checkAndRequestPermissions() {
-        if (checkHasPermissions(READ_SMS, RECEIVE_SMS, RECEIVE_MMS).reduceAll()) {
+        if (checkHasPermissions(*PERMISSIONS).reduceAll()) {
             val text = getString(R.string.permissions_ok)
             Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
         } else {
-            requestPermissions(this, arrayOf(READ_SMS, RECEIVE_SMS, RECEIVE_MMS), 1000)
+            requestPermissions(this, PERMISSIONS, 1000)
         }
     }
 }
