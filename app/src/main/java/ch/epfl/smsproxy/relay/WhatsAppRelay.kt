@@ -2,10 +2,8 @@ package ch.epfl.smsproxy.relay
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.widget.Toast
-import ch.epfl.smsproxy.R
 import java.net.URLEncoder
 
 class WhatsAppRelay(
@@ -15,7 +13,8 @@ class WhatsAppRelay(
 
     private val number = number.removePrefix("00").removePrefix("+")
 
-    override fun relay(text: String) {
+    override suspend fun relay(text: String) {
+        @Suppress("BlockingMethodInNonBlockingContext")
         val encodedText = URLEncoder.encode(text, "utf-8")
 
         val url = "https://api.whatsapp.com/send?phone=$number&text=$encodedText"

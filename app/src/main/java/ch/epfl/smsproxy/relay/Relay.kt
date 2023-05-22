@@ -9,5 +9,5 @@ fun interface Relay {
     /**
      * Sends the text to the configured remote.
      */
-    fun relay(text: String)
+    suspend fun relay(text: String)
 }

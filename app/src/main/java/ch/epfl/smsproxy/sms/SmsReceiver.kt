@@ -9,6 +9,10 @@ import android.provider.Telephony.Sms.Intents.SMS_RECEIVED_ACTION
 import android.text.format.DateFormat
 import android.util.Log
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,7 +41,9 @@ class SmsReceiver : BroadcastReceiver() {
             val body = sms.displayMessageBody
 
             val sentText = "At $time, $sender sent:\n$body"
-            sendHelper.broadcast(sentText)
+            CoroutineScope(SupervisorJob()).launch(Dispatchers.IO) {
+                sendHelper.broadcast(sentText)
+            }
         }
     }
 }

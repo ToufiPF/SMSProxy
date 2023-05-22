@@ -5,7 +5,7 @@ class EmailRelay(
     private val destinationAddress: String,
 ) : Relay {
 
-    override fun relay(text: String) {
+    override suspend fun relay(text: String) {
         emailService.send(arrayOf(destinationAddress), arrayOf(), arrayOf(), "Forwarded SMS", text)
     }
 }
