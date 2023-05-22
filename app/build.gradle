@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
 
     implementation "androidx.preference:preference-ktx:1.2.0"
-    implementation 'javax.mail:mail:1.4.1'
+    implementation 'com.sun.mail:android-mail:1.6.2'
     implementation 'com.google.code.gson:gson:2.10.1'
 
     // toufi utils
