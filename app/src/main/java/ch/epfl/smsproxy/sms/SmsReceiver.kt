@@ -20,7 +20,7 @@ class SmsReceiver : BroadcastReceiver() {
 
     companion object {
         fun timestampToString(timeMs: Long): String {
-            return DateFormat.format("dd/MM, hh:mm", timeMs).toString()
+            return DateFormat.format("dd/MM, HH:mm", timeMs).toString()
         }
     }
 
