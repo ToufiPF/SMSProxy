@@ -48,6 +48,9 @@ android {
         resources {
             excludes += "/META-INF/*.md"
         }
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 }
 

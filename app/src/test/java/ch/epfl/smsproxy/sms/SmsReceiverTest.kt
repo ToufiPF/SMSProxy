@@ -6,8 +6,8 @@ import android.provider.Telephony
 import android.telephony.SmsMessage
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import io.mockk.MockKMatcherScope
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 
@@ -28,15 +28,15 @@ class SmsReceiverTest {
     }
 
     private lateinit var context: Context
-
     private lateinit var sendHelper: MessageSender
     private lateinit var receiver: SmsReceiver
 
     @Before
     fun init() {
         context = getApplicationContext()
-        sendHelper = mockk(relaxed = true)
-        receiver = SmsReceiver(sendHelper)
+        sendHelper = mockk()
+        receiver = SmsReceiver()
+        receiver.sendHelper = sendHelper
     }
 
     @Test
@@ -57,7 +57,7 @@ class SmsReceiverTest {
         }
         receiver.onReceive(context, intent)
 
-        verify {
+        coVerify {
             sendHelper.broadcast(
                 and(contains("27838890001"), and(contains("29/03"), contains("hellohello")))
             )

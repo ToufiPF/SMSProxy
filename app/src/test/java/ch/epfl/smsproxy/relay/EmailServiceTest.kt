@@ -72,7 +72,7 @@ class EmailServiceTest {
         val props = properties.captured
         assertEquals(host, props["mail.smtp.host"])
         assertEquals(port.toString(), props["mail.smtp.port"])
-        assertEquals(startTls, props["mail.smtp.starttls.enable"])
+        assertEquals(startTls.toString(), props["mail.smtp.starttls.enable"])
         assertEquals(false.toString(), props["mail.smtp.auth"])
         assertEquals(user, props["mail.smtp.user"])
 

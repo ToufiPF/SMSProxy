@@ -8,11 +8,13 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import ch.epfl.smsproxy.relay.Relay
 import ch.epfl.smsproxy.relay.RelayFactory
 import ch.epfl.smsproxy.ui.fragment.RelayListFragment.Companion.PREF_NAME
+import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
-import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -27,7 +29,7 @@ class MessageSenderImplTest {
 
     private fun getString(@StringRes res: Int): String = context.getString(res)
 
-    private fun runTest(testFun: () -> Unit) {
+    private fun runTest(testFun: suspend () -> Unit) {
         mockkObject(RelayFactory::class, recordPrivateCalls = false) {
             println("allloooo1")
             every {
@@ -46,7 +48,9 @@ class MessageSenderImplTest {
             }
             println("allloooo2")
 
-            testFun()
+            runBlocking(Dispatchers.Default) {
+                testFun()
+            }
         }
     }
 
@@ -69,7 +73,7 @@ class MessageSenderImplTest {
             sender.broadcast("test message")
 
             assertEquals(1, instantiatedRelays.size)
-            verify {
+            coVerify {
                 instantiatedRelays.first().first.relay("test message")
             }
             confirmVerified()
