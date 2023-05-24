@@ -38,8 +38,6 @@ class SmsReceiver : BroadcastReceiver() {
     lateinit var sendHelper: MessageSender
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (context == null) return
-
         when (intent?.action) {
             SMS_RECEIVED_ACTION, DATA_SMS_RECEIVED_ACTION -> {
                 val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)

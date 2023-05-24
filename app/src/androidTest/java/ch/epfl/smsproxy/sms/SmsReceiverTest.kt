@@ -5,12 +5,16 @@ import android.content.Intent
 import android.provider.Telephony
 import android.telephony.SmsMessage
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import io.mockk.MockKMatcherScope
 import io.mockk.coVerify
-import io.mockk.mockk
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
+@HiltAndroidTest
 class SmsReceiverTest {
 
     companion object {
@@ -27,16 +31,20 @@ class SmsReceiverTest {
         }
     }
 
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    lateinit var sendHelper: MessageSender
     private lateinit var context: Context
-    private lateinit var sendHelper: MessageSender
     private lateinit var receiver: SmsReceiver
 
     @Before
     fun init() {
+        hiltRule.inject()
+
         context = getApplicationContext()
-        sendHelper = mockk()
         receiver = SmsReceiver()
-        receiver.sendHelper = sendHelper
     }
 
     @Test

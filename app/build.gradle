@@ -86,7 +86,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
 
     // 1.12.7 and + causes build to fail due to duplicate META-INF/LICENCE files
-    def mockkVersion = "1.13.5"
+    def mockkVersion = "1.13.2"
     testImplementation "io.mockk:mockk:$mockkVersion"
     androidTestImplementation "io.mockk:mockk-android:$mockkVersion"
 }
