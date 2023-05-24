@@ -1,5 +1,7 @@
 package ch.epfl.smsproxy.ui.activity
 
+import android.Manifest.permission.READ_CALL_LOG
+import android.Manifest.permission.READ_PHONE_STATE
 import android.Manifest.permission.READ_SMS
 import android.Manifest.permission.RECEIVE_MMS
 import android.Manifest.permission.RECEIVE_SMS
@@ -27,7 +29,13 @@ class MainActivity : MockPermissionsActivity(R.layout.activity_main) {
     companion object {
         private val TAG = this::class.simpleName!!
 
-        private val PERMISSIONS = arrayOf(READ_SMS, RECEIVE_SMS, RECEIVE_MMS)
+        private val PERMISSIONS = arrayOf(
+            READ_SMS,
+            RECEIVE_SMS,
+            RECEIVE_MMS,
+            READ_PHONE_STATE,
+            READ_CALL_LOG,
+        )
     }
 
 
