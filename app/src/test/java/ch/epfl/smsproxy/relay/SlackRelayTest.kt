@@ -3,6 +3,7 @@ package ch.epfl.smsproxy.relay
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -27,7 +28,7 @@ class SlackRelayTest {
     }
 
     @Test
-    fun relayPostsMessageToWebhook() {
+    fun relayPostsMessageToWebhook(): Unit = runBlocking {
         val text = "hello \"w0rld\" !"
         val expected = "{\"text\":\"hello \\\"w0rld\\\" !\"}"
         val relay = SlackRelay(url)

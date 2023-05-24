@@ -2,6 +2,7 @@ package ch.epfl.smsproxy.relay
 
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
@@ -17,7 +18,7 @@ class EmailRelayTest {
     }
 
     @Test
-    fun relaySendsMessageToRecipient() {
+    fun relaySendsMessageToRecipient(): Unit = runBlocking {
         val text = "hello \"w0rld\" !"
         val relay = EmailRelay(service, destination)
         relay.relay(text)
