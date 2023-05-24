@@ -3,9 +3,12 @@ package ch.epfl.smsproxy.ui.activity
 import android.Manifest.permission.READ_SMS
 import android.Manifest.permission.RECEIVE_MMS
 import android.Manifest.permission.RECEIVE_SMS
+import android.app.Instrumentation
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.PermissionChecker.PERMISSION_DENIED
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.test.core.app.ActivityScenario
@@ -13,10 +16,11 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
+import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -31,41 +35,46 @@ import ch.epfl.toufi.android_utils.ui.activity.PreferencesActivity.Companion.EXT
 import ch.epfl.toufi.android_utils.ui.activity.PreferencesActivity.Companion.EXTRA_TITLE
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.startsWith
-import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class MainActivityInstrumentedTest {
 
+    companion object {
+        const val TEST_PREF_NAME = "test_preferences_relay_config"
+    }
+
     private lateinit var context: Context
     private lateinit var relayListPrefs: SharedPreferences
+    private lateinit var relayConfigPrefs: SharedPreferences
 
     private lateinit var emailType: String
     private lateinit var slackType: String
 
+    // order = 0 => execute first; note: for hilt order must be == 0
+    @get:Rule(order = 0)
+    val intentsTestRule = IntentsRule()
+
+//    @get:Rule(order = 0)
+//    val permissionRule = GrantPermissionRule.grant(READ_SMS, RECEIVE_SMS, RECEIVE_MMS, INTERNET)!!
+
     @Before
     fun init() {
-        Intents.init()
         MockPermissionsActivity.configuredSelfPermissions.clear()
         MockPermissionsActivity.configuredShouldShowRationale.clear()
 
         context = getApplicationContext()
+        context.deleteSharedPreferences(RelayListFragment.PREF_NAME)
+        context.deleteSharedPreferences(TEST_PREF_NAME)
+
         relayListPrefs = context.getSharedPreferences(RelayListFragment.PREF_NAME, MODE_PRIVATE)
-        relayListPrefs.edit().clear().apply()
+        relayConfigPrefs = context.getSharedPreferences(TEST_PREF_NAME, MODE_PRIVATE)
 
         emailType = context.getString(R.string.pref_type_email)
         slackType = context.getString(R.string.pref_type_slack)
     }
-
-    @After
-    fun cleanUp() {
-        Intents.release()
-    }
-
-    // order = 0 => execute first; note: for hilt order must be == 0
-
-//    @get:Rule(order = 0)
-//    val permissionRule = GrantPermissionRule.grant(READ_SMS, RECEIVE_SMS, RECEIVE_MMS, INTERNET)!!
 
     private fun runTest(testFun: (ActivityScenario<MainActivity>) -> Unit) {
         ActivityScenario.launch(MainActivity::class.java).use { scenario ->
@@ -112,6 +121,14 @@ class MainActivityInstrumentedTest {
 
     @Test
     fun clickingOnFABDisplaysConfigChoiceDialog() = runTest {
+        val type = "new_test_type"
+        intending(hasComponent(RelayPreferencesActivity::class.java.name)).respondWith(
+            Instrumentation.ActivityResult(AppCompatActivity.RESULT_OK, Intent().apply {
+                putExtra(EXTRA_PREFERENCES_NAME, TEST_PREF_NAME)
+                putExtra(EXTRA_PREFERENCES_ID, type)
+            })
+        )
+
         onView(withId(R.id.preferences_add_button)).perform(click())
 
         context.resources.getStringArray(R.array.pref_type_display_names).forEach { str ->
@@ -128,6 +145,8 @@ class MainActivityInstrumentedTest {
                 hasExtra(EXTRA_PREFERENCES_NAME, startsWith(emailType)),
             )
         )
+
+        assertEquals(type, relayListPrefs.getString(TEST_PREF_NAME, null))
 
         assertNoUnverifiedIntentIgnoringBootstrap()
     }
