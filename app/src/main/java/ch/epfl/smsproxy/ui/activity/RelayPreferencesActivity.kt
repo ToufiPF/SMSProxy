@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.activity.OnBackPressedCallback
 import ch.epfl.smsproxy.R
+import ch.epfl.smsproxy.relay.RelayFactory
 import ch.epfl.smsproxy.ui.fragment.EmailPreferencesFragment
 import ch.epfl.smsproxy.ui.fragment.RelayPreferenceFragment
 import ch.epfl.smsproxy.ui.fragment.SlackPreferenceFragment
@@ -69,7 +70,13 @@ class RelayPreferencesActivity : PreferencesActivity() {
             getString(R.string.pref_type_slack) -> SlackPreferenceFragment(sharedPreferencesName)
             else -> null
         }
-        validFragmentId = if (fragment != null) fragmentId else null
+
+        validFragmentId = null
+        if (fragment != null) {
+            validFragmentId = fragmentId
+            getSharedPreferences(sharedPreferencesName, MODE_PRIVATE)
+                .edit().putString(RelayFactory.PREF_TYPE_KEY, fragmentId).apply()
+        }
 
         return fragment
     }
